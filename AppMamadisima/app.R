@@ -12,19 +12,28 @@ library(tidyverse)
 list_choices <-  unique(msleep$vore)[!is.na(unique(msleep$vore))]
 names(list_choices) <- paste(unique(msleep$vore)[!is.na(unique(msleep$vore))],"vore",sep="")
 # Define UI for application that draws a histogram
-ui <- fluidPage(
-
-    # Application title
-    titlePanel("Apliacion mamadisma"),
-    includeMarkdown("references.Rmd"),
-    # Sidebar with a slider input for number of bins 
-    h3("Plots"),
-    selectInput("select", label = h3("Plot by type of alimentation"), 
-                choices = list_choices,
-                selected = 1),
-    plotOutput(outputId="hello")
-)
-
+ui <- navbarPage("Shiny app",
+                 
+                 tabPanel("msleep",
+                          fluidPage( 
+                              sidebarLayout(# position = "right",
+                                  sidebarPanel(
+                                      selectInput("select", label = h3("Plot by type of alimentation"), 
+                                                  choices = character(0),
+                                                  selected = 1)
+                                  ),
+                                  mainPanel(
+                                      plotOutput(outputId = "hello")
+                                  )
+                              
+                          
+                 )
+) # fluidPage
+), #  titlePanel
+tabPanel("References",
+         includeMarkdown("references.Rmd")
+) #  titlePanel
+) # navbarPage
 col_scale <- scale_colour_discrete(limits = unique(msleep$vore))    
 # Define server logic required to draw a histogram
 server <- function(input, output, session) {
